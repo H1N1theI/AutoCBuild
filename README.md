@@ -4,7 +4,7 @@ A small python build system I wrote to build my C++ projects. Should work on C a
 ## Why?
 Because I got tired of makefiles, CMake, and whatever.
 
-This is not nessecarily better, infact, it can't multithread or do most of the flashy features that other build systems can (such as conditional source includes).
+This is not nessecarily better, infact, its change detection is slower and it lacks the flashy features that other build systems can (such as conditional source includes).
 
 However, it's simple. Really simple.
 
@@ -63,6 +63,6 @@ names that are reserved will not be actually executed.
 ## TODO:
 
 - [x]: Generate dependency information and finally implement efficient partial compilation.
-- [ ]: Thread the compilation for more speed.
+- [x]: Thread the compilation for more speed.
 - [ ]: Make config file and execution much more platform agnostic.
 - [ ]: Use timestamps before hashing for more performance.

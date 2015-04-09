@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import multiprocessing
 
 #Construct the command template
 def getCommandTemplate(buildSetting, configParsed):
@@ -21,6 +22,8 @@ def getCommandTemplate(buildSetting, configParsed):
 
 #This constructs the compile command.
 def build(recompilelist, arguments, configParsed):
+    commandlist = list()
+    
     for file in recompilelist:
         output = "./" + configParsed["output"]["interbuild"] + os.path.splitext(file)[0][(len(configParsed["build"]["srcdir"]) + 2):] + ".obj"
         
@@ -35,7 +38,18 @@ def build(recompilelist, arguments, configParsed):
         
         print "Compiling \"" + output + "\""
         
-        sys.stdout.write(subprocess.check_output(command, shell=True))
+        commandlist.append(command)
+    
+    threads = multiprocessing.cpu_count()
+    
+    if(threads < 1):
+        threads = 1
+    
+    result = multiprocessing.Pool(processes = threads).map_async(concurrentBuild, commandlist)
+    
+    for output in result.get():
+        if output != None:
+            sys.stdout.write(output)
 
 #Links the output.
 def link(outputList, buildSetting, configParsed):
@@ -51,4 +65,8 @@ def link(outputList, buildSetting, configParsed):
         command += "-L" + library + " "
     for library in configParsed[buildSetting]["extlibs"]:
         command += "-L" + library + " "
+    
     sys.stdout.write(subprocess.check_output(command, shell=True))
+    
+def concurrentBuild(command):
+    subprocess.check_output(command, shell=True)
