@@ -61,8 +61,7 @@ names that are reserved will not be actually executed.
 
 
 ## TODO:
-
-- [x]: Generate dependency information and finally implement efficient partial compilation.
-- [x]: Thread the compilation for more speed.
-- [ ]: Make config file and execution much more platform agnostic.
-- [ ]: Use timestamps before hashing for more performance.
+  - [x] Generate dependency information and finally implement efficient partial compilation.
+  - [x] Thread the compilation for more speed.
+  - [ ] Make config file and execution much more platform agnostic.
+  - [ ] Use timestamps before hashing for more performance.
