@@ -1,3 +1,8 @@
+if ! [-e bin] 
+then
+    mkdir bin
+fi
+
 python -m compileall src/*
 mv src/*.pyc bin/
 cd bin
