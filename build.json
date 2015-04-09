@@ -1,0 +1,39 @@
+{
+    "output" : {
+        "binname": "bin",
+        "interbuild": "obj",
+        "bindir": "bin"
+    },
+    
+    "build" : {
+        "command": "g++",
+        "srcext" : ["c", "cpp"],
+        "incext" : ["h", "hpp"],
+        "flags" : [
+            ["m64", ""],
+            ["std", "c++11"], 
+            ["Wall", ""]
+        ],
+        "srcdir": "../src",
+        "includedirs" : ["include"],
+        "libs" : ["crypto", "ssl"],
+        "extlibs" : []
+    },
+    
+    "debug" : {
+        "flags" : [
+            ["Og", ""],
+            ["g", ""]
+        ],
+        "libs" : [],
+        "extlibs" : []
+    },
+    
+    "release" : {
+        "flags" : [
+            ["O3", ""]
+        ],
+        "libs" : [],
+        "extlibs" : []
+    }
+}

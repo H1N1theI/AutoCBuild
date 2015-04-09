@@ -1,0 +1,7 @@
+python -m compileall src/*
+mv src/*.pyc bin/
+cd bin
+zip -r ../acb *.pyc
+cd ..
+echo '#!/usr/bin/env python' | cat - acb.zip > acb
+chmod +x acb
