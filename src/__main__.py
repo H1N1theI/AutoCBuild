@@ -4,8 +4,6 @@ import sys
 import os
 import json
 import re
-import hashlib
-import shutil
 
 import build
 import buildfiles
@@ -25,9 +23,9 @@ def main():
     
     if len(sys.argv) > 1:
         if sys.argv[1] == "rebuild":
-            clean(configParsed)
+            buildfiles.clean(configParsed)
         elif sys.argv[1] == "clean":
-            clean(configParsed)
+            buildfiles.clean(configParsed)
             sys.exit(0)
         elif sys.argv[1] == "validate":
             validate = True
@@ -91,7 +89,8 @@ def main():
     
     for dirname, dirnames, filenames in dirtree:
         for filename in filenames:
-            outputList.append(os.path.join(dirname, filename))
+            if filename.endswith(".obj"):
+                outputList.append(os.path.join(dirname, filename))
             
     build.link(outputList, buildSetting, configParsed)
     

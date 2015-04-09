@@ -24,7 +24,9 @@ def build(recompilelist, arguments, configParsed):
     for file in recompilelist:
         output = "./" + configParsed["output"]["interbuild"] + os.path.splitext(file)[0][(len(configParsed["build"]["srcdir"]) + 2):] + ".obj"
         
-        command = configParsed["build"]["command"] + " " + arguments + "-c " + file 
+        depfile = file[len(configParsed["build"]["srcdir"]) +2:]
+        
+        command = configParsed["build"]["command"] + " " + arguments + "-MMD " + "-MF " + "\"./deps/" + depfile + ".d" + "\" " + "-c " + file 
         
         for dir in configParsed["build"]["includedirs"]:
             command += " -I" + dir

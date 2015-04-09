@@ -3,6 +3,8 @@ import sys
 import json
 import hashlib
 
+import deps
+
 def createMetaFile():
     defaultfile = {"src": dict(), "inc" : dict()}
     finalizeFile(defaultfile)
@@ -41,18 +43,20 @@ def getIncludeList(filelist, configParsed):
     return includelist
     
 def getRebuildList(sourcelist, includelist, metajson, configParsed):
-    forcebuild = False;
-    recompilelist = sourcelist
+    changedinc = list()
+    recompilelist = list()
     
     for incfile in includelist:
         hashkey = getHash(incfile)
         if incfile in metajson["inc"]:
             if metajson["inc"][incfile] != hashkey:
                 metajson["inc"][incfile] = hashkey
-                forcebuild = True
+                changedinc.append(incfile)
+                print "File " + incfile + " has changed, will recompile dependents."
         else:
             metajson["inc"][incfile] = hashkey
-            forcebuild = True
+            changedinc.append(incfile)
+            print "File " + incfile + " is new, will recompile some dependents."
         
     for srcfile in sourcelist:
         hashkey = getHash(srcfile)
@@ -65,11 +69,9 @@ def getRebuildList(sourcelist, includelist, metajson, configParsed):
             metajson["src"][srcfile] = hashkey
             recompilelist.append(srcfile)
             print "File " + incfile + " is new, will partially recompile."
-
-    if forcebuild:
-        print "A include file or other additionally tracked file is new or modified, forcing full compilation."
-        recompilelist = sourcelist
-        
+    
+    recompilelist.extend(deps.getRecompileTargets(changedinc, configParsed))
+    
     return recompilelist
     
 def finalizeFile(metajson):
