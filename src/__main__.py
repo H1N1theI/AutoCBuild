@@ -17,6 +17,8 @@ def main():
     configPath = "build.json"
     buildSetting = "debug"
     
+    validate = False;
+    
     configFile = open(configPath)
     configParsed = json.load(configFile)
     configFile.close();
@@ -27,6 +29,8 @@ def main():
         elif sys.argv[1] == "clean":
             clean(configParsed)
             sys.exit(0)
+        elif sys.argv[1] == "validate":
+            validate = True
         else:
             buildSetting = sys.argv[1]
         if len(sys.argv) > 2:
@@ -46,7 +50,7 @@ def main():
     #Creates the build metafile
     metafile = None
     if not os.path.exists(".buildmeta"):
-        createMetaFile();
+        metabuild.createMetaFile();
     if os.path.exists(".buildmeta"):
         metafile = open(".buildmeta", "r+")
     
@@ -55,7 +59,7 @@ def main():
     try:
         metajson = json.load(metafile)
     except ValueError, e:
-        createMetaFile()
+        metabuild.createMetaFile()
         metajson = json.load(metafile)
     
     sourcelist = metabuild.getSourceList(filelist, configParsed)
@@ -69,9 +73,15 @@ def main():
     
     args = build.getCommandTemplate(buildSetting, configParsed)
     
+    if validate:
+        args += "-fsyntax-only "
+    
     build.build(recompilelist, args, configParsed)
     
     metabuild.finalizeFile(metajson)
+    
+    if validate:
+        sys.exit(0)
     
     print "Linking output..."
 

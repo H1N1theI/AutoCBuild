@@ -1,19 +1,21 @@
 import os
 import sys
 import json
+import hashlib
 
 def createMetaFile():
     defaultfile = {"src": dict(), "inc" : dict()}
     finalizeFile(defaultfile)
 
-def getHash(file):
+def getHash(path):
+    file = open(path)
     blocksize = 65536
     hashfunc = hashlib.sha256()
     buffer = file.read(blocksize)
-    while len(buf) > 0:
-        hashfunc.update(buf)
+    while len(buffer) > 0:
+        hashfunc.update(buffer)
         buffer = file.read(blocksize)
-    return hashfunc.digest()
+    return hashfunc.hexdigest()
 
 def getSourceList(filelist, configParsed):
     #Constructs the list of all source files to include.
