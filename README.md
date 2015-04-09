@@ -4,11 +4,11 @@ A small python build system I wrote to build my C++ projects. Should work on C a
 ## Why?
 Because I got tired of makefiles, CMake, and whatever.
 
-This is not nessecarily better, infact, is worse at incremental building due to the fact that I have not implemented parsing the -MM flag on GCC yet.
+This is not nessecarily better, infact, it can't multithread or do most of the flashy features that other build systems can (such as conditional source includes).
 
-However, tt's simple. Really simple.
+However, it's simple. Really simple.
 
-Hopefully one day, it will support proper incremental building.
+And it does incremental compilation. What is there to hate?
 
 ## Basic Usage
 Create a build.json (I would suggest copying the one in the repo and editing it) and edit until it fits your program.
@@ -62,6 +62,7 @@ names that are reserved will not be actually executed.
 
 ## TODO:
 
-- [ ]: Generate dependency information and finally implement efficient partial compilation.
+- [x]: Generate dependency information and finally implement efficient partial compilation.
+- [ ]: Thread the compilation for more speed.
 - [ ]: Make config file and execution much more platform agnostic.
 - [ ]: Use timestamps before hashing for more performance.
