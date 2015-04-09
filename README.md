@@ -19,6 +19,8 @@ If you need to rebuild, type `acb clean` and then `acb`, or `acb rebuild`.
 
 Compiling for a release build is just `acb release`.
 
+If you just want to validate the files, just use `acb validate`.
+
 ## JSON file structure.
 
 ### Output settings
@@ -54,7 +56,9 @@ Any additional setting can be invoked via `acb {option}`
 
 `extlibs`: External library directories, like above.
 
-You can have as many extra configurations as you want, but keep in mind that the configuration file will be loaded at runtime.
+You can have as many extra configurations as you want, but keep in mind that the configuration file will be loaded at runtime, and any configurations using
+names that are reserved will not be actually executed.
+
 
 ## TODO:
 
