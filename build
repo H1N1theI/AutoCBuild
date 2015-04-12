@@ -1,4 +1,4 @@
-if ! [-e bin] 
+if ! [ -e bin ] 
 then
     mkdir bin
 fi
