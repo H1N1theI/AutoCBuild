@@ -3,36 +3,44 @@
 import sys
 import os
 import json
-import re
 
 import build
 import buildfiles
 import metabuild
+import config
 
 def main():
     filelist = list()
     
     configPath = "build.json"
-    buildSetting = "debug"
     
     validate = False;
     
-    configFile = open(configPath)
-    configParsed = json.load(configFile)
-    configFile.close();
+    configParsed = None
+    
+    clean = False
+    
+    exit = False
     
     if len(sys.argv) > 1:
         if sys.argv[1] == "rebuild":
-            buildfiles.clean(configParsed)
+            clean = True
+            if len(sys.argv) > 2:
+                configPath = sys.arg[1] + ".json"
         elif sys.argv[1] == "clean":
-            buildfiles.clean(configParsed)
-            sys.exit(0)
-        elif sys.argv[1] == "validate":
-            validate = True
+            clean = True
+            exit = True
+            if len(sys.argv) > 2:
+                configPath = sys.arg[1] + ".json"
         else:
-            buildSetting = sys.argv[1]
-        if len(sys.argv) > 2:
-            buildSetting = sys.argv[2]
+            configPath = sys.argv[0] + ".json"
+            
+    configParsed = config.loadConfig(configPath)
+        
+    if clean:
+        buildfiles.clean(configParsed)
+        if exit:
+            sys.exit(0)
     
     
     #Creates folders if not already present.
@@ -67,14 +75,9 @@ def main():
     
     recompilelist = metabuild.getRebuildList(sourcelist, includelist, metajson, configParsed)
     
-    print "Starting compilation for option " + buildSetting + "..."
+    print "Starting compilation..."
     
-    args = build.getCommandTemplate(buildSetting, configParsed)
-    
-    if validate:
-        args += "-fsyntax-only "
-    
-    build.build(recompilelist, args, configParsed)
+    build.build(recompilelist, configParsed)
     
     metabuild.finalizeFile(metajson)
     
@@ -92,7 +95,7 @@ def main():
             if filename.endswith(".obj"):
                 outputList.append(os.path.join(dirname, filename))
             
-    build.link(outputList, buildSetting, configParsed)
+    build.link(outputList, configParsed)
     
     return "Build finished."
 

@@ -4,32 +4,25 @@ import subprocess
 import multiprocessing
 
 #Construct the command template
-def getCommandTemplate(buildSetting, configParsed):
+def getCommandTemplate(stage, configParsed):
     args = ""
-    for argument in configParsed["build"]["flags"]:
-        args += "-" + argument[0] 
-        if(argument[1] != ""):
-            args += "=" + argument[1]
-        args += " "
-    
-    for argument in configParsed[buildSetting]["flags"]:
-        args += "-" + argument[0] 
-        if(argument[1] != ""):
-            args += "=" + argument[1] + " "
-        args += " "
-    
+    for argument in configParsed[stage]["flags"]:
+        args += " -" + argument[0] + argument[1] + argument[2]
+        
     return args
 
 #This constructs the compile command.
-def build(recompilelist, arguments, configParsed):
+def build(recompilelist, configParsed):
     commandlist = list()
+    
+    arguments = getCommandTemplate("build", configParsed)
     
     for file in recompilelist:
         output = "./" + configParsed["output"]["interbuild"] + os.path.splitext(file)[0][(len(configParsed["build"]["srcdir"]) + 2):] + ".obj"
         
         depfile = file[len(configParsed["build"]["srcdir"]) +2:]
         
-        command = configParsed["build"]["command"] + " " + arguments + "-MMD " + "-MF " + "\"./deps/" + depfile + ".d" + "\" " + "-c " + file 
+        command = configParsed["build"]["command"] + " -MMD -MF " + "\"./deps" + depfile + ".d" + "\"" + arguments + " -c " + file 
         
         for dir in configParsed["build"]["includedirs"]:
             command += " -I" + dir
@@ -52,19 +45,19 @@ def build(recompilelist, arguments, configParsed):
             sys.exit(0)
 
 #Links the output.
-def link(outputList, buildSetting, configParsed):
+def link(outputList, configParsed):
+    arguments = getCommandTemplate("link", configParsed)
+    
     command = configParsed["build"]["command"] + " -o " + "./" + configParsed["output"]["bindir"] + "/" + configParsed["output"]["binname"] + " "
     for file in outputList:
         command += file + " "
-    for library in configParsed["build"]["libs"]:
-        command += "-l" + library + " "
-    for library in configParsed[buildSetting]["libs"]:
+    for library in configParsed["link"]["libs"]:
         command += "-l" + library + " "
     
-    for library in configParsed["build"]["extlibs"]:
-        command += "-L" + library + " "
-    for library in configParsed[buildSetting]["extlibs"]:
-        command += "-L" + library + " "
+    for libdir in configParsed["link"]["extlibs"]:
+        command += "-L" + libdir + " "
+        
+    command += arguments
     
     sys.stdout.write(subprocess.check_output(command, shell=True))
     

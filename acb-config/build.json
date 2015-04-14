@@ -1,0 +1,31 @@
+{
+    "output" : {
+        "binname": "bin",
+        "interbuild": "obj",
+        "bindir": "bin"
+    },
+    
+    "build" : {
+        "command": "g++",
+        "srcdir": "src",
+        "srcext" : ["c", "cpp"],
+        "incext" : ["h", "hpp"],
+        "includedirs" : ["include"],
+        "flags" : [
+            ["m64", "", ""],
+            ["std", "", "c++11"], 
+            ["Wall", "", ""],
+            ["Og", "", ""],
+            ["g", "", ""]
+        ]
+    },
+    
+    "link" : {
+        "link" : true,
+        "flags" : [
+            ["rdynamic", "", ""]
+        ],
+        "libs" : ["crypto", "ssl"],
+        "extlibs" : []
+    }
+}

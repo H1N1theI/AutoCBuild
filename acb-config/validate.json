@@ -1,0 +1,28 @@
+{
+    "output" : {
+        "binname": "bin",
+        "interbuild": "obj",
+        "bindir": "bin"
+    },
+    
+    "build" : {
+        "command": "g++",
+        "srcdir": "src",
+        "srcext" : ["c", "h", "cpp", "hpp"],
+        "incext" : ["h", "hpp"],
+        "includedirs" : ["include"],
+        "flags" : [
+            ["m64", "", ""],
+            ["std", "", "c++11"], 
+            ["Wall", "", ""],
+            ["Og", "", ""],
+            ["g", "", ""]
+        ]
+    },
+    "link" : {
+        "link" : false,
+        "flags" : [
+            ["", "", ""]
+        ]
+    }
+}
