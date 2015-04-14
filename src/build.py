@@ -44,12 +44,12 @@ def build(recompilelist, arguments, configParsed):
     
     if(threads < 1):
         threads = 1
-    
     result = multiprocessing.Pool(processes = threads).map_async(concurrentBuild, commandlist)
     
     for output in result.get():
-        if output != None:
-            sys.stdout.write(output)
+        if output != 0:
+            print "A file failed to compile! Stopping compilation."
+            sys.exit(0)
 
 #Links the output.
 def link(outputList, buildSetting, configParsed):
@@ -69,4 +69,9 @@ def link(outputList, buildSetting, configParsed):
     sys.stdout.write(subprocess.check_output(command, shell=True))
     
 def concurrentBuild(command):
-    subprocess.check_output(command, shell=True)
+    try:
+        subprocess.check_call(command, shell=True)
+    except subprocess.CalledProcessError:
+        return -1
+
+    return 0
