@@ -26,14 +26,12 @@ def main():
         if sys.argv[1] == "rebuild":
             clean = True
             if len(sys.argv) > 2:
-                configPath = sys.arg[1] + ".json"
+                configPath = sys.arg[2] + ".json"
         elif sys.argv[1] == "clean":
             clean = True
             exit = True
-            if len(sys.argv) > 2:
-                configPath = sys.arg[1] + ".json"
         else:
-            configPath = sys.argv[0] + ".json"
+            configPath = sys.argv[1] + ".json"
             
     configParsed = config.loadConfig(configPath)
         
@@ -81,7 +79,8 @@ def main():
     
     metabuild.finalizeFile(metajson)
     
-    if validate:
+    if configParsed["link"]["link"] == False:
+        print "Build finished."
         sys.exit(0)
     
     print "Linking output..."
