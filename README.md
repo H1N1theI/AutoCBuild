@@ -46,6 +46,8 @@ If you just want to validate the files, just use `acb validate`.
 ### Link settings
 `link`: A boolean, wether this setting should link or just stop at compilation.
 
+`flags`: Flags to use at link time.
+
 `libs`: Libraries to hunt for, specifically, `-l{key}` style.
 
 `extlibs`: Directory for libraries your compiler will not search for by default.

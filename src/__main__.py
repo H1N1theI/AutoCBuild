@@ -26,7 +26,7 @@ def main():
         if sys.argv[1] == "rebuild":
             clean = True
             if len(sys.argv) > 2:
-                configPath = sys.arg[2] + ".json"
+                configPath = sys.argv[2] + ".json"
         elif sys.argv[1] == "clean":
             clean = True
             exit = True
